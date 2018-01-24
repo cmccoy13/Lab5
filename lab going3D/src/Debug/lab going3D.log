@@ -1,0 +1,5 @@
+﻿  main.cpp
+c:\users\cmmccoy\downloads\lab going3d\lab going3d\lab going3d\src\main.cpp(217): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\cmmccoy\downloads\lab going3d\lab going3d\lab going3d\src\main.cpp(243): warning C4305: '=': truncation from 'double' to 'float'
+  lab going3D.vcxproj -> C:\Users\cmmccoy\Downloads\lab going3D\lab going3D\lab going3D\Debug\lab going3D.exe
+  lab going3D.vcxproj -> C:\Users\cmmccoy\Downloads\lab going3D\lab going3D\lab going3D\Debug\lab going3D.pdb (Partial PDB)
