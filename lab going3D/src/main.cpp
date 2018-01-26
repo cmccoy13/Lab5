@@ -15,6 +15,98 @@ ZJ Wood CPE 471 Lab 3 base code
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+class Matrix
+{
+public:
+	float data[4][4];
+	void createIdentityMatrix();
+	void createTranslateMat(float x, float y, float z);
+	void createScaleMat(float x, float y, float z);
+	void createRotationMatX(float rot);
+	void createRotationMatY(float rot);
+	void createRotationMatZ(float rot);
+	void multMat(Matrix A, Matrix B);
+};
+
+void Matrix::createIdentityMatrix()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			data[i][j] = 0.0;
+		}		
+	}
+
+	data[0][0] = 1.0;
+	data[1][1] = 1.0;
+	data[2][2] = 1.0;
+	data[3][3] = 1.0;
+}
+
+void Matrix::createTranslateMat(float x, float y, float z)
+{
+	createIdentityMatrix();
+
+	data[3][0] = x;
+	data[3][1] = y;
+	data[3][2] = z;
+}
+
+void Matrix::createScaleMat(float x, float y, float z)
+{
+	createIdentityMatrix();
+
+	data[0][0] = x;
+	data[1][1] = y;
+	data[2][2] = z;
+}
+
+void Matrix::createRotationMatX(float rot)
+{
+	createIdentityMatrix();
+
+	data[1][1] = cos(rot);
+	data[1][2] = -sin(rot);
+	data[2][1] = sin(rot);
+	data[2][2] = cos(rot);
+}
+
+void Matrix::createRotationMatY(float rot)
+{
+	createIdentityMatrix();
+
+	data[0][0] = cos(rot);
+	data[0][2] = sin(rot);
+	data[2][0] = -sin(rot);
+	data[2][2] = cos(rot);
+}
+
+void Matrix::createRotationMatZ(float rot)
+{
+	createIdentityMatrix();
+
+	data[0][0] = cos(rot);
+	data[0][1] = -sin(rot);
+	data[1][0] = sin(rot);
+	data[1][1] = cos(rot);
+}
+
+void Matrix::multMat(Matrix A, Matrix B)
+{
+	createIdentityMatrix();
+
+	for (int k = 0; k < 4; k++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				data[j][k] += (A.data[i][k]) * (B.data[j][i]);
+			}
+		}
+	}
+}
 
 class Application : public EventCallbacks
 {
@@ -223,9 +315,14 @@ public:
 		// Draw the box using GLSL.
 		prog->bind();
 
+		Matrix mat;
+		mat.createRotationMatY(0.2);
+
+		float *transMat = &mat.data[0][0];
+
 		//send the matrices to the shaders
 		glUniformMatrix4fv(prog->getUniform("P"), 1, GL_FALSE, &P[0][0]);
-		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, &V[0][0]);
+		glUniformMatrix4fv(prog->getUniform("V"), 1, GL_FALSE, &mat.data[0][0]);
 		glUniformMatrix4fv(prog->getUniform("M"), 1, GL_FALSE, &M[0][0]);
 
 		glBindVertexArray(VertexArrayID);
